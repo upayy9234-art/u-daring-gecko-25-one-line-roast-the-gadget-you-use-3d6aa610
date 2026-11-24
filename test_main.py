@@ -80,5 +80,27 @@ class TestCli(unittest.TestCase):
             self.assertTrue(text.rstrip("\n").strip())
 
 
+class TestValidateLine(unittest.TestCase):
+    def test_accepts_the_entry_line(self):
+        self.assertEqual(entry_module.validate_line(entry_module.LINE),
+                         entry_module.LINE)
+
+    def test_rejects_empty_line(self):
+        with self.assertRaises(ValueError):
+            entry_module.validate_line("   ")
+
+    def test_rejects_multiline(self):
+        with self.assertRaises(ValueError):
+            entry_module.validate_line("first line\nsecond line")
+
+    def test_rejects_too_long(self):
+        with self.assertRaises(ValueError):
+            entry_module.validate_line("x" * 201)
+
+    def test_rejects_missing_gadget_words(self):
+        with self.assertRaises(ValueError):
+            entry_module.validate_line("My toaster is slow today.")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
